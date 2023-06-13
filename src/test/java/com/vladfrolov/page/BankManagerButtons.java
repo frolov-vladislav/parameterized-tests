@@ -14,4 +14,5 @@ public enum BankManagerButtons {
     public String getSelector() {
         return selector;
     }
+
 }

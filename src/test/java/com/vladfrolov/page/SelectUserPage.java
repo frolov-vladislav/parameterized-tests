@@ -8,4 +8,9 @@ public class SelectUserPage {
 
     protected SelenideElement usersMenu = element("#userSelect"),
             loginButton = element(".btn-default");
+
+    public void login(String login) {
+        usersMenu.selectOption(login);
+        loginButton.click();
+    }
 }

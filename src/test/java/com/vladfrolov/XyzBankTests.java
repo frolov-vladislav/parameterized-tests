@@ -1,21 +1,21 @@
 package com.vladfrolov;
 
-import com.vladfrolov.actions.Actions;
-import com.vladfrolov.asserts.Asserts;
-import com.vladfrolov.page.AccountHistoryButtons;
-import com.vladfrolov.page.BankManagerButtons;
-import com.vladfrolov.page.SelectUserPage;
+import com.vladfrolov.page.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import static com.vladfrolov.TestData.*;
+
 import java.util.stream.Stream;
+
 import static com.codeborne.selenide.Selenide.open;
+import static com.vladfrolov.TestData.*;
 
 public class XyzBankTests {
 
-    Asserts assertion = new Asserts();
-    Actions action = new Actions();
+    AccountPage accountPage = new AccountPage();
+    BankManagerPage bankManagerPage = new BankManagerPage();
+    MainPage mainPage = new MainPage();
+    SelectUserPage selectUserPage = new SelectUserPage();
 
     @BeforeEach
     void before() {
@@ -31,9 +31,9 @@ public class XyzBankTests {
             "Neville Longbottom"
     })
     public void loginTest(String login) {
-        action.mainPage.clickOnCustomerLogin();
-        action.selectUserPage.login(login);
-        assertion.accountPage.loginInTitleIs(login);
+        mainPage.clickOnCustomerLogin();
+        selectUserPage.login(login);
+        accountPage.loginInTitleIs(login);
     }
 
     @ParameterizedTest
@@ -45,26 +45,26 @@ public class XyzBankTests {
             "Neville Longbottom, 1013"
     })
     public void accountNumberTest(String login, int accountNumber) {
-        action.mainPage.clickOnCustomerLogin();
-        action.selectUserPage.login(login);
-        assertion.accountPage.accountNumberIs(accountNumber);
+        mainPage.clickOnCustomerLogin();
+        selectUserPage.login(login);
+        accountPage.accountNumberIs(accountNumber);
     }
 
     @ParameterizedTest
     @EnumSource(value = AccountHistoryButtons.class, names = {"TRANSACTIONS"}, mode = EnumSource.Mode.EXCLUDE)
     public void arraysUnderAccountButtonsTest(AccountHistoryButtons accountHistoryButton) {
-        action.mainPage.clickOnCustomerLogin();
-        action.selectUserPage.login("Hermoine Granger");
-        action.accountPage.clickOnAccountButton(accountHistoryButton);
-        assertion.accountPage.arrayUnderButtonIsVisible(accountHistoryButton);
+        mainPage.clickOnCustomerLogin();
+        selectUserPage.login("Hermoine Granger");
+        accountPage.clickOnAccountButton(accountHistoryButton);
+        accountPage.arrayUnderButtonIsVisible(accountHistoryButton);
     }
 
     @ParameterizedTest
     @EnumSource(value = BankManagerButtons.class, mode = EnumSource.Mode.EXCLUDE)
     public void arraysUnderBankManagerButtonsTest(BankManagerButtons bankManagerButtons) {
-        action.mainPage.clickOnBankManagerLogin();
-        action.bankManagerPage.clickOnBankManagerButton(bankManagerButtons);
-        assertion.bankManagerPage.arrayUnderButtonIsVisible(bankManagerButtons);
+        mainPage.clickOnBankManagerLogin();
+        bankManagerPage.clickOnBankManagerButton(bankManagerButtons);
+        bankManagerPage.arrayUnderButtonIsVisible(bankManagerButtons);
     }
 
     static Stream<Arguments> customer() {
@@ -76,12 +76,12 @@ public class XyzBankTests {
     @ParameterizedTest
     @MethodSource("customer")
     public void addCustomerTest(String firstName, String lastName, String postCode, String alertMessage) {
-        action.mainPage.clickOnBankManagerLogin();
-        action.bankManagerPage.clickOnBankManagerButton(BankManagerButtons.ADD_CUSTOMER);
-        action.bankManagerPage.fillFirstNameField(firstName);
-        action.bankManagerPage.fillLastNameField(lastName);
-        action.bankManagerPage.fillPostCodeField(postCode);
-        action.bankManagerPage.submitCustomer();
-        assertion.bankManagerPage.alertIs(alertMessage);
+        mainPage.clickOnBankManagerLogin();
+        bankManagerPage.clickOnBankManagerButton(BankManagerButtons.ADD_CUSTOMER);
+        bankManagerPage.fillFirstNameField(firstName);
+        bankManagerPage.fillLastNameField(lastName);
+        bankManagerPage.fillPostCodeField(postCode);
+        bankManagerPage.submitCustomer();
+        bankManagerPage.alertIs(alertMessage);
     }
 }

@@ -1,4 +1,4 @@
-Автотесты на сайте https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login
+Автотесты сайта https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login
 
 XyzBankTests содержит различно параметеризированные тесты
 
